@@ -10,18 +10,12 @@ class UserService {
       throw ApiError.BadRequest(`User with email ${email} already exists`);
     }
     const hashPassword = await argon.hash(password);
-    //const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
 
     const user = await User.create({
       username,
       email,
       password: hashPassword,
-      //activationLink,
     });
-    // await mailService.sendActivationMail(
-    //   email,
-    //   `${process.env.API_URL}/api/activate/${activationLink}`
-    // );
 
     const userDto = {
       id: user.id,
@@ -34,8 +28,6 @@ class UserService {
 
     return { ...tokens, user: userDto };
   }
-
-  async activate(activationLink) {}
 
   async login(email, password, next) {
     const user = await User.findOne({

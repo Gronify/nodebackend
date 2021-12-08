@@ -5,12 +5,16 @@ class ApiError extends Error {
     this.errors = errors;
   }
 
-  static UnauthorizedError() {
-    return new ApiError(401, "User LOX");
-  }
-
   static BadRequest(message, errors = []) {
     return new ApiError(400, message, errors);
+  }
+
+  static Unauthorized() {
+    return new ApiError(401, "User Unauthorized");
+  }
+
+  static Forbidden() {
+    return new ApiError(403, "No Access");
   }
 }
 

@@ -9,8 +9,14 @@ module.exports = new Sequelize(
     operatorsAliases: false,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    operatorsAliases: false,
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
     timestamps: true,
-    //logging: false,
+
+    logging: true,
   }
 );
