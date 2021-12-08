@@ -1,11 +1,13 @@
 const ApiError = require("../error/api-error");
+const logger = require("../services/logger-service");
 
 module.exports = function (err, req, res, next) {
-  console.log("\x1b[31m", err, "\x1b[0m");
   if (err instanceof ApiError) {
+    logger.warn(err);
     return res
       .status(err.status)
       .json({ message: err.message, errors: err.errors });
   }
+  logger.err(err);
   return res.status(500).json({ message: "Unexpected error" });
 };

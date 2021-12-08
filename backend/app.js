@@ -3,7 +3,6 @@ const express = require("express");
 const sequelize = require("./db");
 const cors = require("cors");
 const router = require("./routes");
-const bodyParser = require("body-parser");
 const errorMiddleware = require("./middlewares/error-middleware");
 const cookieParser = require("cookie-parser");
 const ApiError = require("./error/api-error");
@@ -13,12 +12,10 @@ const app = express();
 
 app.use(cookieParser());
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-if (!isProduction) {
-  //app.use(errorhandler());
-}
+app.use(
+  express.urlencoded({ extended: true, limit: "50mb", parameterLimit: 100000 })
+);
+app.use(express.json({ limit: "50mb" }));
 
 app.use(process.env.API_PREFIX, router);
 app.use(errorMiddleware);
