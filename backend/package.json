@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.28.2",
+    "axios": "^0.21.4",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.7.1",
+    "dotenv": "^10.0.0",
+    "errorhandler": "^1.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^7.1.9",
+    "mysql2": "^2.2.5",
+    "path": "^0.12.7",
+    "sequelize": "^6.6.5",
+    "slug": "^0.9.4"
+  },
+  "devDependencies": {
+    "newman": "^3.8.2",
+    "nodemon": "^1.11.0"
+  }
+}
