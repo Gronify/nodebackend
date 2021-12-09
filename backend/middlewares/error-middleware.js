@@ -8,6 +8,6 @@ module.exports = function (err, req, res, next) {
       .status(err.status)
       .json({ message: err.message, errors: err.errors });
   }
-  logger.err(err);
+  logger.error(err);
   return res.status(500).json({ message: "Unexpected error" });
 };

@@ -29,7 +29,7 @@ class UserService {
     return { ...tokens, user: userDto };
   }
 
-  async login(email, password, next) {
+  async login(email, password) {
     const user = await User.findOne({
       raw: true,
       where: { email },
