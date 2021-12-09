@@ -11,6 +11,20 @@ class ApplicationController {
       next(e);
     }
   }
+  async edit(req, res, next) {
+    try {
+      throw ApiError.MethodNotAllowed();
+    } catch (e) {
+      next(e);
+    }
+  }
+  async get(req, res, next) {
+    try {
+      throw ApiError.MethodNotAllowed();
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new ApplicationController();

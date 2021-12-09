@@ -16,6 +16,9 @@ class ApiError extends Error {
   static Forbidden() {
     return new ApiError(403, "No Access");
   }
+  static MethodNotAllowed() {
+    return new ApiError(405, "Method Not Allowed...");
+  }
 }
 
 module.exports = ApiError;
