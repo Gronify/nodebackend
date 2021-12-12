@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 
 import { Box } from "@mui/system";
@@ -11,6 +11,7 @@ import { Button, Collapse, List, Paper, TextField } from "@mui/material";
 
 import { TransitionGroup } from "react-transition-group";
 import CustomDataGrid from "../CustomDataGrid";
+import UserService from "../../services/UserService";
 
 function EditBox(props) {
   return (
@@ -52,12 +53,15 @@ export default function Users() {
 
   const [dataGridLoading, setDataGridLoading] = React.useState(false);
   const [editBox, setEditBox] = React.useState({ id: null, visible: false });
+  const [dataRows, setDataRows] = React.useState([]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "firstName", headerName: "First name" },
-    { field: "lastName", headerName: "Last name" },
-    { field: "age", headerName: "Age", type: "number" },
+    { field: "username", headerName: "username", width: 200 },
+    { field: "email", headerName: "email", width: 200 },
+    { field: "role", headerName: "role", width: 100 },
+    { field: "createdAt", headerName: "createdAt", type: "date", width: 200 },
+    { field: "updatedAt", headerName: "updatedAt", type: "date", width: 200 },
     {
       field: "actions",
       type: "actions",
@@ -83,32 +87,19 @@ export default function Users() {
     },
   ];
 
-  const rows = [
-    { id: 1, lastName: "dsf", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "fsdfdsfdsds", firstName: "fdsfsdfsdfds", age: 42 },
-    {
-      id: 3,
-      lastName: "Landsfdfsfsdsfdnister",
-      firstName: "Jaiasfdgme",
-      age: 45,
-    },
-    {
-      id: 4,
-      lastName: "Stadsffdsfsdsfdrk",
-      firstName: "Ardasdsadasya",
-      age: 16,
-    },
-    {
-      id: 5,
-      lastName: "Tarsdffsdfgaryen",
-      firstName: "Dadsadsadenerys",
-      age: null,
-    },
-    { id: 6, lastName: "Melsdfsdfsdisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "dsfsdfsdfds", firstName: "Ferfdsfsdfrara", age: 44 },
-    { id: 8, lastName: "fsdfsdfsddfs", firstName: "Rossdsfdsfini", age: 36 },
-    { id: 9, lastName: "Roxdfsfsdfsdfie", firstName: "Hargsdfvey", age: 65 },
-  ];
+  useEffect(() => {
+    refreshData();
+  }, []);
+
+  function refreshData() {
+    UserService.getUsers()
+      .then((response) => {
+        setDataRows(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  }
 
   return (
     <Box sx={{ pt: 2, display: "flex", justifyContent: "center" }}>
@@ -136,6 +127,9 @@ export default function Users() {
                   variant="outlined"
                   color="secondary"
                   startIcon={<RefreshIcon />}
+                  onClick={() => {
+                    refreshData();
+                  }}
                 >
                   Refresh
                 </Button>
@@ -149,7 +143,7 @@ export default function Users() {
             <Collapse>
               <CustomDataGrid
                 columns={columns}
-                rows={rows}
+                rows={dataRows}
                 loading={dataGridLoading}
               ></CustomDataGrid>
             </Collapse>

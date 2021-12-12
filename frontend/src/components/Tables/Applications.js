@@ -96,13 +96,7 @@ export default function Applications() {
     { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
   ];
 
-  function refreshData() {
-    UserService.auth()
-      .then((response) => {})
-      .catch((e) => {
-        console.log(e.response?.data?.message);
-      });
-  }
+  function refreshData() {}
 
   return (
     <Box sx={{ pt: 2, display: "flex", justifyContent: "center" }}>

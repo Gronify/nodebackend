@@ -15,4 +15,10 @@ router.get(
   checkRoleMiddleware("ADMIN"),
   userController.check
 );
+router.get(
+  "/users",
+  authMiddleware,
+  checkRoleMiddleware("ADMIN"),
+  userController.getUsers
+);
 module.exports = router;
