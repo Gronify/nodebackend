@@ -1,9 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Toolbar, AppBar, Typography } from "@mui/material";
 import Logout from "@mui/icons-material/Logout";
 import Login from "@mui/icons-material/Login";
+import AuthService from "../services/AuthService";
+
 export default function Navbar(props) {
+  const navigate = useNavigate();
+  function logout() {
+    AuthService.logout()
+      .then((response) => {
+        localStorage.removeItem("token");
+        navigate("/login");
+      })
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  }
   return (
     <AppBar position="static">
       <Toolbar>
@@ -11,9 +24,17 @@ export default function Navbar(props) {
           Admin Panel
         </Typography>
         {props.auth ? (
-          <Button color="inherit" component={Link} endIcon={<Logout />}>
-            Logout
-          </Button>
+          <div>
+            <Button
+              color="inherit"
+              endIcon={<Logout />}
+              onClick={() => {
+                logout();
+              }}
+            >
+              Logout
+            </Button>
+          </div>
         ) : (
           <Button
             color="inherit"

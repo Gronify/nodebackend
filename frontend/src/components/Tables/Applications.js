@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
@@ -7,11 +7,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CloseIcon from "@mui/icons-material/Close";
-
 import { Button, Collapse, List, Paper, TextField } from "@mui/material";
-import CustomLoadingOverlay from "../CustomLoadingOverlay";
-import CustomToolbar from "../CustomToolbar";
+
 import { TransitionGroup } from "react-transition-group";
+import CustomDataGrid from "../CustomDataGrid";
+import UserService from "../../services/UserService";
 
 function EditBox(props) {
   return (
@@ -51,7 +51,6 @@ export default function Applications() {
   const scrollToTopRef = React.useRef(null);
   const executeScroll = () => scrollToTopRef.current.scrollIntoView();
 
-  const [selectionModel, setSelectionModel] = React.useState([]);
   const [dataGridLoading, setDataGridLoading] = React.useState(false);
   const [editBox, setEditBox] = React.useState({ id: null, visible: false });
 
@@ -97,6 +96,14 @@ export default function Applications() {
     { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
   ];
 
+  function refreshData() {
+    UserService.auth()
+      .then((response) => {})
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  }
+
   return (
     <Box sx={{ pt: 2, display: "flex", justifyContent: "center" }}>
       <Paper sx={{ width: "90%", mb: 3, p: 2 }} ref={scrollToTopRef}>
@@ -123,6 +130,9 @@ export default function Applications() {
                   variant="outlined"
                   color="secondary"
                   startIcon={<RefreshIcon />}
+                  onClick={() => {
+                    refreshData();
+                  }}
                 >
                   Refresh
                 </Button>
@@ -133,30 +143,12 @@ export default function Applications() {
                 <EditBox id={editBox.id}></EditBox>
               </Collapse>
             ) : null}
-
             <Collapse>
-              <DataGrid
-                autoHeight
-                rows={rows}
+              <CustomDataGrid
                 columns={columns}
-                onSelectionModelChange={(newSelectionModel) => {
-                  setSelectionModel(newSelectionModel);
-                }}
-                selectionModel={selectionModel}
-                components={{
-                  Toolbar: CustomToolbar,
-                  LoadingOverlay: CustomLoadingOverlay,
-                }}
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                checkboxSelection
-                disableSelectionOnClick
-                filterMode={"client"}
-                paginationMode={"client"}
-                sortingMode={"client"}
-                density={"standard"}
-                editMode={"row"}
+                rows={rows}
                 loading={dataGridLoading}
-              />
+              ></CustomDataGrid>
             </Collapse>
           </TransitionGroup>
         </List>

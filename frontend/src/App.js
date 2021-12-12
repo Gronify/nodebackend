@@ -1,40 +1,43 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Routes,
   Route,
-  // Navigate,
+  Navigate,
+  Outlet,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import Home from "./components/Home";
 
 function App() {
-  const auth = sessionStorage.getItem("user");
-  // function PrivateRoute({ children }) {
-  //   return auth ? children : <Navigate to="/login" />;
-  // }
-
+  const [update, setUpdate] = useState(false);
+  const auth = localStorage.getItem("token");
+  function PrivateRoute({ children }) {
+    return auth ? children : <Navigate to="/login" />;
+  }
   return (
-    <Router>
-      <div>
-        <Navbar auth={auth} />
+    <BrowserRouter>
+      <Navbar auth={auth} />
 
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          {/* <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          /> */}
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </div>
-    </Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={<Login setUpdate={setUpdate} update={update} />}
+        />
+        {/* <PrivateRoute path="/" element={<Home />} /> */}
+        {/* <Route path="/" element={<Home />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 

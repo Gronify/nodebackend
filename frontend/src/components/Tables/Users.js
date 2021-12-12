@@ -1,73 +1,161 @@
-import {
-  Box,
-  Fab,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
 import React from "react";
-import Edit from "@mui/icons-material/Edit";
-import Add from "@mui/icons-material/Add";
-function createData(id, name, email) {
-  return { id, name, email };
+import { GridActionsCellItem } from "@mui/x-data-grid";
+
+import { Box } from "@mui/system";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import CloseIcon from "@mui/icons-material/Close";
+import { Button, Collapse, List, Paper, TextField } from "@mui/material";
+
+import { TransitionGroup } from "react-transition-group";
+import CustomDataGrid from "../CustomDataGrid";
+
+function EditBox(props) {
+  return (
+    <Paper
+      sx={{
+        mb: 3,
+        p: 2,
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "column",
+        rowGap: "10px",
+      }}
+    >
+      <TextField
+        id="outlined-basic"
+        label="id"
+        variant="outlined"
+        disabled={true}
+        value={props.id ? props.id : "id will be created"}
+      />
+      <TextField id="outlined-basic" label="firstName" variant="outlined" />
+      <TextField id="outlined-basic" label="lastName" variant="outlined" />
+      <TextField id="outlined-basic" label="age" variant="outlined" />
+      {props.id ? (
+        <Button variant="outlined" color="secondary" startIcon={<AddIcon />}>
+          Edit
+        </Button>
+      ) : (
+        <Button variant="outlined" color="secondary" startIcon={<AddIcon />}>
+          Create
+        </Button>
+      )}
+    </Paper>
+  );
 }
-
-const rows = [
-  createData(1, "name1", "name1@hotmail.com"),
-  createData(2, "name2", "name2@hotmail.com"),
-  createData(3, "name3", "name3@hotmail.com"),
-  createData(4, "name4", "name4@hotmail.com"),
-  createData(5, "name5", "name5@hotmail.com"),
-];
-
 export default function Users() {
+  const scrollToTopRef = React.useRef(null);
+  const executeScroll = () => scrollToTopRef.current.scrollIntoView();
+
+  const [dataGridLoading, setDataGridLoading] = React.useState(false);
+  const [editBox, setEditBox] = React.useState({ id: null, visible: false });
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "firstName", headerName: "First name" },
+    { field: "lastName", headerName: "Last name" },
+    { field: "age", headerName: "Age", type: "number" },
+    {
+      field: "actions",
+      type: "actions",
+      getActions: (params) => [
+        <GridActionsCellItem
+          icon={<EditIcon />}
+          label="Edit"
+          onClick={() => {
+            setEditBox((prev) => ({
+              id: params.id,
+              visible: true,
+            }));
+            executeScroll();
+          }}
+        />,
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={() => {}}
+          showInMenu
+        />,
+      ],
+    },
+  ];
+
+  const rows = [
+    { id: 1, lastName: "dsf", firstName: "Jon", age: 35 },
+    { id: 2, lastName: "fsdfdsfdsds", firstName: "fdsfsdfsdfds", age: 42 },
+    {
+      id: 3,
+      lastName: "Landsfdfsfsdsfdnister",
+      firstName: "Jaiasfdgme",
+      age: 45,
+    },
+    {
+      id: 4,
+      lastName: "Stadsffdsfsdsfdrk",
+      firstName: "Ardasdsadasya",
+      age: 16,
+    },
+    {
+      id: 5,
+      lastName: "Tarsdffsdfgaryen",
+      firstName: "Dadsadsadenerys",
+      age: null,
+    },
+    { id: 6, lastName: "Melsdfsdfsdisandre", firstName: null, age: 150 },
+    { id: 7, lastName: "dsfsdfsdfds", firstName: "Ferfdsfsdfrara", age: 44 },
+    { id: 8, lastName: "fsdfsdfsddfs", firstName: "Rossdsfdsfini", age: 36 },
+    { id: 9, lastName: "Roxdfsfsdfsdfie", firstName: "Hargsdfvey", age: 65 },
+  ];
+
   return (
     <Box sx={{ pt: 2, display: "flex", justifyContent: "center" }}>
-      <Paper sx={{ width: "90%", mb: 3 }}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>id</TableCell>
-                <TableCell align="right">Name</TableCell>
-                <TableCell align="right">Email</TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      <Paper sx={{ width: "90%", mb: 3, p: 2 }} ref={scrollToTopRef}>
+        <List>
+          <TransitionGroup>
+            <Collapse>
+              <Box
+                sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}
+              >
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={editBox.visible ? <CloseIcon /> : <AddIcon />}
+                  onClick={() => {
+                    setEditBox((prev) => ({
+                      id: null,
+                      visible: !prev.visible,
+                    }));
+                  }}
                 >
-                  <TableCell component="th" scope="row">
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="right">{row.name}</TableCell>
-                  <TableCell align="right">{row.email}</TableCell>
-                  <TableCell align="right">
-                    <IconButton aria-label="Edit" size="large">
-                      <Edit fontSize="inherit" color="primary" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  {editBox.visible ? "Close" : "New Application"}
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<RefreshIcon />}
+                >
+                  Refresh
+                </Button>
+              </Box>
+            </Collapse>
+            {editBox.visible ? (
+              <Collapse>
+                <EditBox id={editBox.id}></EditBox>
+              </Collapse>
+            ) : null}
+            <Collapse>
+              <CustomDataGrid
+                columns={columns}
+                rows={rows}
+                loading={dataGridLoading}
+              ></CustomDataGrid>
+            </Collapse>
+          </TransitionGroup>
+        </List>
       </Paper>
-      <Fab
-        sx={{ position: "absolute", bottom: 50, right: 50 }}
-        color="secondary"
-        aria-label="add"
-      >
-        <Add />
-      </Fab>
     </Box>
   );
 }
