@@ -26,9 +26,9 @@ export default function Home() {
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
-          //   orientation="vertical"
-          //   variant="scrollable"
-          //   scrollButtons="auto"
+          // orientation="vertical"
+          variant="scrollable"
+          scrollButtons="auto"
           centered
         >
           <Tab label="Applications" />

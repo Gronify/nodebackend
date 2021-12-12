@@ -4,8 +4,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
-  Navigate,
+  // Navigate,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
@@ -13,9 +12,9 @@ import Home from "./components/Home";
 
 function App() {
   const auth = sessionStorage.getItem("user");
-  function PrivateRoute({ children }) {
-    return auth ? children : <Navigate to="/login" />;
-  }
+  // function PrivateRoute({ children }) {
+  //   return auth ? children : <Navigate to="/login" />;
+  // }
 
   return (
     <Router>
