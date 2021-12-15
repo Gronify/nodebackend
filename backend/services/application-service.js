@@ -28,6 +28,26 @@ class ApplicationService {
 
     return { application: applicationDto };
   }
+
+  async edit(id, name, text) {
+    const application = await Application.findOne({ where: { id } });
+    if (!Application) {
+      throw ApiError.BadRequest(`Application with id ${id} not exists`);
+    }
+
+    const updatedApplication = await application.update({
+      name: name,
+      text: text,
+    });
+
+    const applicationDto = {
+      id: updatedApplication.id,
+      name: updatedApplication.name,
+      text: updatedApplication.text,
+    };
+
+    return { application: applicationDto };
+  }
 }
 
 module.exports = new ApplicationService();

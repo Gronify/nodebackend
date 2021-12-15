@@ -11,7 +11,6 @@ import { Button, Collapse, List, Paper, TextField } from "@mui/material";
 
 import { TransitionGroup } from "react-transition-group";
 import CustomDataGrid from "../CustomDataGrid";
-import UserService from "../../services/UserService";
 
 function EditBox(props) {
   return (

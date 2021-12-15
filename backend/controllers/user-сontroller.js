@@ -76,6 +76,38 @@ class UserController {
       next(e);
     }
   }
+
+  async create(req, res, next) {
+    try {
+      const { username, email, password, role } = req.body;
+      const userData = await userService.create(
+        username,
+        email,
+        password,
+        role
+      );
+      return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async edit(req, res, next) {
+    try {
+      const { id, username, email, password, role } = req.body;
+      const userData = await userService.edit(
+        id,
+        username,
+        email,
+        password,
+        role
+      );
+
+      return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new UserController();

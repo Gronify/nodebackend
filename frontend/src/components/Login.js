@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Navigate, Redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Paper, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import AuthService from "../services/AuthService";
-import axios from "axios";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");

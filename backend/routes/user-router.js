@@ -21,4 +21,16 @@ router.get(
   checkRoleMiddleware("ADMIN"),
   userController.getUsers
 );
+router.put(
+  "/user",
+  authMiddleware,
+  checkRoleMiddleware("ADMIN"),
+  userController.edit
+);
+router.post(
+  "/user",
+  authMiddleware,
+  checkRoleMiddleware("ADMIN"),
+  userController.create
+);
 module.exports = router;

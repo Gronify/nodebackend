@@ -2,6 +2,7 @@ const { User } = require("../models");
 const argon = require("argon2");
 const tokenService = require("./token-service");
 const ApiError = require("../error/api-error");
+const e = require("express");
 
 class UserService {
   async registration(username, email, password) {
@@ -83,6 +84,52 @@ class UserService {
   async getAllUsers() {
     const users = await User.findAll();
     return users;
+  }
+  async create(id, username, email, password, role) {
+    const candidate = await User.findOne({ where: { email } });
+    if (candidate) {
+      throw ApiError.BadRequest(`User with email ${email} already exists`);
+    }
+    const hashPassword = await argon.hash(password);
+
+    const user = await User.create({
+      username,
+      email,
+      password: hashPassword,
+      role,
+    });
+
+    const userDto = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    };
+
+    return { user: userDto };
+  }
+
+  async edit(id, username, email, password, role) {
+    const user = await User.findOne({ where: { id } });
+    if (!user) {
+      throw ApiError.BadRequest(`User with id ${id} not exists`);
+    }
+
+    const hashPassword = await argon.hash(password);
+
+    const updatedUser = await user.update({
+      username: username,
+      email: email,
+      password: hashPassword,
+      role: role,
+    });
+
+    const userDto = {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+    };
+
+    return { user: userDto };
   }
 }
 

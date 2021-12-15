@@ -2,7 +2,6 @@ import React from "react";
 import CustomLoadingOverlay from "./CustomLoadingOverlay";
 import CustomToolbar from "./CustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
-import { fabClasses } from "@mui/material";
 
 export default function CustomDataGrid(props) {
   return (

@@ -1,65 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import CloseIcon from "@mui/icons-material/Close";
 import { Button, Collapse, List, Paper, TextField } from "@mui/material";
 
 import { TransitionGroup } from "react-transition-group";
 import CustomDataGrid from "../CustomDataGrid";
 import UserService from "../../services/UserService";
+import EditBoxButtons from "../EditBoxButtons";
+import AuthService from "../../services/AuthService";
 
-function EditBox(props) {
-  return (
-    <Paper
-      sx={{
-        mb: 3,
-        p: 2,
-        display: "flex",
-        justifyContent: "space-between",
-        flexDirection: "column",
-        rowGap: "10px",
-      }}
-    >
-      <TextField
-        id="outlined-basic"
-        label="id"
-        variant="outlined"
-        disabled={true}
-        value={props.id ? props.id : "id will be created"}
-      />
-      <TextField id="outlined-basic" label="firstName" variant="outlined" />
-      <TextField id="outlined-basic" label="lastName" variant="outlined" />
-      <TextField id="outlined-basic" label="age" variant="outlined" />
-      {props.id ? (
-        <Button variant="outlined" color="secondary" startIcon={<AddIcon />}>
-          Edit
-        </Button>
-      ) : (
-        <Button variant="outlined" color="secondary" startIcon={<AddIcon />}>
-          Create
-        </Button>
-      )}
-    </Paper>
-  );
-}
 export default function Users() {
-  const scrollToTopRef = React.useRef(null);
+  const scrollToTopRef = useRef(null);
   const executeScroll = () => scrollToTopRef.current.scrollIntoView();
 
-  const [dataGridLoading, setDataGridLoading] = React.useState(false);
-  const [editBox, setEditBox] = React.useState({ id: null, visible: false });
-  const [dataRows, setDataRows] = React.useState([]);
+  const [dataGridLoading, setDataGridLoading] = useState(false);
+  const [editBox, setEditBox] = useState({ row: null, visible: false });
+  const [dataRows, setDataRows] = useState([]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     { field: "username", headerName: "username", width: 200 },
     { field: "email", headerName: "email", width: 200 },
     { field: "role", headerName: "role", width: 100 },
+    { field: "password", headerName: "password", width: 150 },
     { field: "createdAt", headerName: "createdAt", type: "date", width: 200 },
     { field: "updatedAt", headerName: "updatedAt", type: "date", width: 200 },
     {
@@ -71,7 +38,7 @@ export default function Users() {
           label="Edit"
           onClick={() => {
             setEditBox((prev) => ({
-              id: params.id,
+              row: params.row,
               visible: true,
             }));
             executeScroll();
@@ -92,13 +59,153 @@ export default function Users() {
   }, []);
 
   function refreshData() {
+    setDataGridLoading(true);
     UserService.getUsers()
       .then((response) => {
         setDataRows(response.data);
+        setDataGridLoading(false);
       })
       .catch((e) => {
         console.log(e.response?.data?.message);
+        setDataGridLoading(false);
       });
+  }
+
+  function EditBox(props) {
+    const [values, setValues] = useState({
+      id: props.row?.id,
+      username: "",
+      email: "",
+      role: "",
+      password: "",
+    });
+    useEffect(() => {
+      console.log(props.row);
+      setValues({
+        id: props.row?.id,
+        username: props.row?.username,
+        email: props.row?.email,
+        role: props.row?.role,
+        password: props.row?.password,
+      });
+    }, [props.row]);
+    const handleChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
+
+    function editUser(params) {
+      UserService.putUser(
+        params.id,
+        params.username,
+        params.email,
+        params.password,
+        params.role
+      )
+        .then((response) => {
+          refreshData();
+          setEditBox((prev) => ({
+            row: null,
+            visible: false,
+          }));
+        })
+        .catch((e) => {
+          console.log(e.response?.data?.message);
+        });
+    }
+
+    function createUser(params) {
+      UserService.createUser(
+        params.id,
+        params.username,
+        params.email,
+        params.password,
+        params.role
+      )
+        .then((response) => {
+          refreshData();
+          setEditBox((prev) => ({
+            row: null,
+            visible: false,
+          }));
+        })
+        .catch((e) => {
+          console.log(e.response?.data?.message);
+        });
+    }
+
+    return (
+      <Paper
+        sx={{
+          mb: 3,
+          p: 2,
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "column",
+          rowGap: "10px",
+        }}
+      >
+        <TextField
+          id="outlined-basic"
+          label="id"
+          variant="outlined"
+          disabled={true}
+          value={values.id ? values.id : "id will be created"}
+        />
+        <TextField
+          id="outlined-basic"
+          label="username"
+          variant="outlined"
+          value={values.username}
+          onChange={handleChange("username")}
+        />
+        <TextField
+          id="outlined-basic"
+          label="email"
+          variant="outlined"
+          value={values.email}
+          onChange={handleChange("email")}
+        />
+        <TextField
+          id="outlined-basic"
+          label="role"
+          variant="outlined"
+          value={values.role}
+          onChange={handleChange("role")}
+        />
+
+        <TextField
+          id="outlined-basic"
+          label="password"
+          variant="outlined"
+          value={values.password}
+          onChange={handleChange("password")}
+        />
+
+        {values.id ? (
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              editUser(values);
+            }}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              createUser(values);
+            }}
+          >
+            Create
+          </Button>
+        )}
+      </Paper>
+    );
   }
 
   return (
@@ -107,37 +214,15 @@ export default function Users() {
         <List>
           <TransitionGroup>
             <Collapse>
-              <Box
-                sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}
-              >
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={editBox.visible ? <CloseIcon /> : <AddIcon />}
-                  onClick={() => {
-                    setEditBox((prev) => ({
-                      id: null,
-                      visible: !prev.visible,
-                    }));
-                  }}
-                >
-                  {editBox.visible ? "Close" : "New Application"}
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<RefreshIcon />}
-                  onClick={() => {
-                    refreshData();
-                  }}
-                >
-                  Refresh
-                </Button>
-              </Box>
+              <EditBoxButtons
+                editBox={editBox}
+                setEditBox={setEditBox}
+                refreshData={refreshData}
+              ></EditBoxButtons>
             </Collapse>
             {editBox.visible ? (
               <Collapse>
-                <EditBox id={editBox.id}></EditBox>
+                <EditBox row={editBox.row}></EditBox>
               </Collapse>
             ) : null}
             <Collapse>
