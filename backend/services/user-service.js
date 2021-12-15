@@ -85,7 +85,7 @@ class UserService {
     const users = await User.findAll();
     return users;
   }
-  async create(id, username, email, password, role) {
+  async create(username, email, password, role) {
     const candidate = await User.findOne({ where: { email } });
     if (candidate) {
       throw ApiError.BadRequest(`User with email ${email} already exists`);

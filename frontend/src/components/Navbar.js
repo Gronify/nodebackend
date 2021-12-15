@@ -11,6 +11,7 @@ export default function Navbar(props) {
     AuthService.logout()
       .then((response) => {
         localStorage.removeItem("token");
+        props.setUpdate(!props.update);
         navigate("/login");
       })
       .catch((e) => {

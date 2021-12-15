@@ -14,7 +14,7 @@ function App() {
   }
   return (
     <BrowserRouter>
-      <Navbar auth={auth} />
+      <Navbar auth={auth} setUpdate={setUpdate} update={update} />
 
       <Routes>
         <Route
