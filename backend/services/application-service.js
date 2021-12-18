@@ -48,6 +48,10 @@ class ApplicationService {
 
     return { application: applicationDto };
   }
+  async getAll() {
+    const applications = await Application.findAll();
+    return applications;
+  }
 }
 
 module.exports = new ApplicationService();

@@ -13,14 +13,18 @@ class ApplicationController {
   }
   async edit(req, res, next) {
     try {
-      throw ApiError.MethodNotAllowed();
+      const { id, name, text } = req.body;
+      const applicationData = await applicationService.edit(id, name, text);
+
+      return res.json(applicationData);
     } catch (e) {
       next(e);
     }
   }
-  async get(req, res, next) {
+  async getAll(req, res, next) {
     try {
-      throw ApiError.MethodNotAllowed();
+      const applications = await applicationService.getAll();
+      return res.json(applications);
     } catch (e) {
       next(e);
     }

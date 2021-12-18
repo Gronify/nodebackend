@@ -1,63 +1,31 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import CloseIcon from "@mui/icons-material/Close";
 import { Button, Collapse, List, Paper, TextField } from "@mui/material";
 
 import { TransitionGroup } from "react-transition-group";
 import CustomDataGrid from "../CustomDataGrid";
+import EditBoxButtons from "../EditBoxButtons";
+import ApplicationService from "../../services/ApplicationService";
 
-function EditBox(props) {
-  return (
-    <Paper
-      sx={{
-        mb: 3,
-        p: 2,
-        display: "flex",
-        justifyContent: "space-between",
-        flexDirection: "column",
-        rowGap: "10px",
-      }}
-    >
-      <TextField
-        id="outlined-basic"
-        label="id"
-        variant="outlined"
-        disabled={true}
-        value={props.id ? props.id : "id will be created"}
-      />
-      <TextField id="outlined-basic" label="firstName" variant="outlined" />
-      <TextField id="outlined-basic" label="lastName" variant="outlined" />
-      <TextField id="outlined-basic" label="age" variant="outlined" />
-      {props.id ? (
-        <Button variant="outlined" color="secondary" startIcon={<AddIcon />}>
-          Edit
-        </Button>
-      ) : (
-        <Button variant="outlined" color="secondary" startIcon={<AddIcon />}>
-          Create
-        </Button>
-      )}
-    </Paper>
-  );
-}
-export default function Applications() {
-  const scrollToTopRef = React.useRef(null);
+export default function Users() {
+  const scrollToTopRef = useRef(null);
   const executeScroll = () => scrollToTopRef.current.scrollIntoView();
 
-  const [dataGridLoading, setDataGridLoading] = React.useState(false);
-  const [editBox, setEditBox] = React.useState({ id: null, visible: false });
+  const [dataGridLoading, setDataGridLoading] = useState(false);
+  const [editBox, setEditBox] = useState({ row: null, visible: false });
+  const [dataRows, setDataRows] = useState([]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "firstName", headerName: "First name" },
-    { field: "lastName", headerName: "Last name" },
-    { field: "age", headerName: "Age", type: "number" },
+    { field: "name", headerName: "name", width: 200 },
+    { field: "text", headerName: "text", width: 200 },
+    { field: "createdAt", headerName: "createdAt", type: "date", width: 200 },
+    { field: "updatedAt", headerName: "updatedAt", type: "date", width: 200 },
     {
       field: "actions",
       type: "actions",
@@ -67,7 +35,7 @@ export default function Applications() {
           label="Edit"
           onClick={() => {
             setEditBox((prev) => ({
-              id: params.id,
+              row: params.row,
               visible: true,
             }));
             executeScroll();
@@ -83,19 +51,129 @@ export default function Applications() {
     },
   ];
 
-  const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  useEffect(() => {
+    refreshData();
+  }, []);
 
-  function refreshData() {}
+  const refreshData = () => {
+    setDataGridLoading(true);
+
+    ApplicationService.getAll()
+      .then((response) => {
+        setDataRows(response.data);
+        setDataGridLoading(false);
+      })
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+        setDataGridLoading(false);
+      });
+  };
+
+  const EditBox = (props) => {
+    const [values, setValues] = useState({
+      id: props.row?.id,
+      name: "",
+      text: "",
+    });
+    useEffect(() => {
+      console.log(props.row);
+      setValues({
+        id: props.row?.id,
+        name: props.row?.name,
+        text: props.row?.text,
+      });
+    }, [props.row]);
+    const handleChange = (prop) => (event) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
+
+    function edit(params) {
+      ApplicationService.put(params.id, params.name, params.text)
+        .then((response) => {
+          refreshData();
+          setEditBox((prev) => ({
+            row: null,
+            visible: false,
+          }));
+        })
+        .catch((e) => {
+          console.log(e.response?.data?.message);
+        });
+    }
+
+    function create(params) {
+      ApplicationService.create(params.id, params.name, params.text)
+        .then((response) => {
+          refreshData();
+          setEditBox((prev) => ({
+            row: null,
+            visible: false,
+          }));
+        })
+        .catch((e) => {
+          console.log(e.response?.data?.message);
+        });
+    }
+
+    return (
+      <Paper
+        sx={{
+          mb: 3,
+          p: 2,
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "column",
+          rowGap: "10px",
+        }}
+      >
+        <TextField
+          id="outlined-basic"
+          label="id"
+          variant="outlined"
+          disabled={true}
+          value={values.id ? values.id : "id will be created"}
+        />
+        <TextField
+          id="outlined-basic"
+          label="name"
+          variant="outlined"
+          value={values.name}
+          onChange={handleChange("name")}
+        />
+        <TextField
+          id="outlined-basic"
+          label="text"
+          variant="outlined"
+          value={values.text}
+          onChange={handleChange("text")}
+        />
+
+        {values.id ? (
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              edit(values);
+            }}
+          >
+            Edit
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="secondary"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              create(values);
+            }}
+          >
+            Create
+          </Button>
+        )}
+      </Paper>
+    );
+  };
 
   return (
     <Box sx={{ pt: 2, display: "flex", justifyContent: "center" }}>
@@ -103,43 +181,21 @@ export default function Applications() {
         <List>
           <TransitionGroup>
             <Collapse>
-              <Box
-                sx={{ mb: 2, display: "flex", justifyContent: "space-between" }}
-              >
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={editBox.visible ? <CloseIcon /> : <AddIcon />}
-                  onClick={() => {
-                    setEditBox((prev) => ({
-                      id: null,
-                      visible: !prev.visible,
-                    }));
-                  }}
-                >
-                  {editBox.visible ? "Close" : "New Application"}
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<RefreshIcon />}
-                  onClick={() => {
-                    refreshData();
-                  }}
-                >
-                  Refresh
-                </Button>
-              </Box>
+              <EditBoxButtons
+                editBox={editBox}
+                setEditBox={setEditBox}
+                refreshData={refreshData}
+              ></EditBoxButtons>
             </Collapse>
             {editBox.visible ? (
               <Collapse>
-                <EditBox id={editBox.id}></EditBox>
+                <EditBox row={editBox.row}></EditBox>
               </Collapse>
             ) : null}
             <Collapse>
               <CustomDataGrid
                 columns={columns}
-                rows={rows}
+                rows={dataRows}
                 loading={dataGridLoading}
               ></CustomDataGrid>
             </Collapse>

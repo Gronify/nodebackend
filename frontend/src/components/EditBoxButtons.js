@@ -18,7 +18,7 @@ export default function EditBoxButtons(props) {
           }));
         }}
       >
-        {props.editBox.visible ? "Close" : "New Application"}
+        {props.editBox.visible ? "Close" : "New Record"}
       </Button>
       <Button
         variant="outlined"

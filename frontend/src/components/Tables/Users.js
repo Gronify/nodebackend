@@ -58,8 +58,9 @@ export default function Users() {
     refreshData();
   }, []);
 
-  function refreshData() {
+  const refreshData = () => {
     setDataGridLoading(true);
+
     UserService.getUsers()
       .then((response) => {
         setDataRows(response.data);
@@ -69,9 +70,9 @@ export default function Users() {
         console.log(e.response?.data?.message);
         setDataGridLoading(false);
       });
-  }
+  };
 
-  function EditBox(props) {
+  const EditBox = (props) => {
     const [values, setValues] = useState({
       id: props.row?.id,
       username: "",
@@ -206,7 +207,7 @@ export default function Users() {
         )}
       </Paper>
     );
-  }
+  };
 
   return (
     <Box sx={{ pt: 2, display: "flex", justifyContent: "center" }}>
