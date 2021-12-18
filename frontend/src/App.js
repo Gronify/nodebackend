@@ -26,6 +26,14 @@ function App() {
           }
         />
         <Route
+          path="/tables"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/login"
           element={<Login setUpdate={setUpdate} update={update} />}
         />

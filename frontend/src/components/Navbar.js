@@ -1,8 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Toolbar, AppBar, Typography } from "@mui/material";
-import Logout from "@mui/icons-material/Logout";
-import Login from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import StorageIcon from "@mui/icons-material/Storage";
 import AuthService from "../services/AuthService";
 
 export default function Navbar(props) {
@@ -28,7 +29,15 @@ export default function Navbar(props) {
           <div>
             <Button
               color="inherit"
-              endIcon={<Logout />}
+              endIcon={<StorageIcon />}
+              component={Link}
+              to="/tables"
+            >
+              Tables
+            </Button>
+            <Button
+              color="inherit"
+              endIcon={<LogoutIcon />}
               onClick={() => {
                 logout();
               }}
@@ -41,7 +50,7 @@ export default function Navbar(props) {
             color="inherit"
             component={Link}
             to="/login"
-            endIcon={<Login />}
+            endIcon={<LoginIcon />}
           >
             Login
           </Button>
