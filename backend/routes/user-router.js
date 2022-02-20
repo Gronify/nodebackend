@@ -1,4 +1,5 @@
 const Router = require("express");
+const { ADMIN } = require("../constants/roles");
 const router = new Router();
 const userController = require("../controllers/user-сontroller");
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -12,25 +13,25 @@ router.get("/auth", authMiddleware, userController.check);
 router.get(
   "/authAdmin",
   authMiddleware,
-  checkRoleMiddleware("ADMIN"),
+  checkRoleMiddleware(ADMIN.name),
   userController.check
 );
 router.get(
   "/users",
   authMiddleware,
-  checkRoleMiddleware("ADMIN"),
+  checkRoleMiddleware(ADMIN.name),
   userController.getUsers
 );
 router.put(
   "/user",
   authMiddleware,
-  checkRoleMiddleware("ADMIN"),
+  checkRoleMiddleware(ADMIN.name),
   userController.edit
 );
 router.post(
   "/user",
   authMiddleware,
-  checkRoleMiddleware("ADMIN"),
+  checkRoleMiddleware(ADMIN.name),
   userController.create
 );
 module.exports = router;
