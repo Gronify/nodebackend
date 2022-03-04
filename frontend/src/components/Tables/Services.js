@@ -10,10 +10,11 @@ import { Button, Collapse, List, Paper, TextField } from "@mui/material";
 import { TransitionGroup } from "react-transition-group";
 import CustomDataGrid from "../CustomDataGrid";
 import EditBoxButtons from "../EditBoxButtons";
-import ApplicationService from "../../services/ApplicationService";
-import moment from "moment";
 
-export default function Application() {
+import moment from "moment";
+import ServicesService from "../../services/ServicesService";
+
+export default function Services() {
   const scrollToTopRef = useRef(null);
   const executeScroll = () => scrollToTopRef.current.scrollIntoView();
 
@@ -24,9 +25,9 @@ export default function Application() {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     { field: "name", headerName: "name", width: 200 },
-    { field: "surname", headerName: "surname", width: 200 },
+    { field: "description", headerName: "description", width: 200 },
     { field: "sex", headerName: "sex", width: 200 },
-    { field: "salary", headerName: "salary", width: 200 },
+    { field: "price", headerName: "price", width: 200 },
     {
       field: "createdAt",
       headerName: "createdAt",
@@ -77,7 +78,7 @@ export default function Application() {
   const refreshData = () => {
     setDataGridLoading(true);
 
-    ApplicationService.getAll()
+    ServicesService.getAll()
       .then((response) => {
         setDataRows(response.data);
         setDataGridLoading(false);
@@ -92,20 +93,18 @@ export default function Application() {
     const [values, setValues] = useState({
       id: props.row?.id,
       name: "",
-      surname: "",
-      order: "",
-      price: 0,
-      status: "",
+      description: "",
+      sex: "",
+      price: "",
     });
     useEffect(() => {
       console.log(props.row);
       setValues({
         id: props.row?.id,
         name: props.row?.name,
-        surname: props.row?.surname,
-        order: props.row?.order,
+        description: props.row?.description,
+        sex: props.row?.sex,
         price: props.row?.price,
-        status: props.row?.status,
       });
     }, [props.row]);
 
@@ -114,13 +113,12 @@ export default function Application() {
     };
 
     function edit(params) {
-      ApplicationService.put(
+      ServicesService.put(
         params.id,
         params.name,
-        params.surname,
-        params.order,
-        params.price,
-        params.status
+        params.description,
+        params.sex,
+        params.price
       )
         .then((response) => {
           refreshData();
@@ -135,13 +133,12 @@ export default function Application() {
     }
 
     function create(params) {
-      ApplicationService.create(
+      ServicesService.create(
         params.id,
         params.name,
-        params.surname,
-        params.order,
-        params.price,
-        params.status
+        params.description,
+        params.sex,
+        params.price
       )
         .then((response) => {
           refreshData();
@@ -182,10 +179,17 @@ export default function Application() {
         />
         <TextField
           id="outlined-basic"
-          label="surname"
+          label="description"
           variant="outlined"
-          value={values.surname}
-          onChange={handleChange("surname")}
+          value={values.description}
+          onChange={handleChange("description")}
+        />
+        <TextField
+          id="outlined-basic"
+          label="sex"
+          variant="outlined"
+          value={values.sex}
+          onChange={handleChange("sex")}
         />
         <TextField
           id="outlined-basic"
@@ -193,20 +197,6 @@ export default function Application() {
           variant="outlined"
           value={values.price}
           onChange={handleChange("price")}
-        />
-        <TextField
-          id="outlined-basic"
-          label="order"
-          variant="outlined"
-          value={values.order}
-          onChange={handleChange("order")}
-        />
-        <TextField
-          id="outlined-basic"
-          label="status"
-          variant="outlined"
-          value={values.status}
-          onChange={handleChange("status")}
         />
 
         {values.id ? (

@@ -1,22 +1,28 @@
 const Router = require("express");
 const { ADMIN } = require("../constants/roles");
-const applicationСontroller = require("../controllers/application-сontroller");
+const servicesСontroller = require("../controllers/services-сontroller");
+
 const authMiddleware = require("../middlewares/auth-middleware");
 const checkRoleMiddleware = require("../middlewares/checkRole-middleware");
 const router = new Router();
 
-router.post("/", applicationСontroller.create);
+router.post(
+  "/",
+  authMiddleware,
+  checkRoleMiddleware(ADMIN.name),
+  servicesСontroller.create
+);
 router.put(
   "/",
   authMiddleware,
   checkRoleMiddleware(ADMIN.name),
-  applicationСontroller.edit
+  servicesСontroller.edit
 );
 router.get(
   "/",
   authMiddleware,
   checkRoleMiddleware(ADMIN.name),
-  applicationСontroller.getAll
+  servicesСontroller.getAll
 );
 
 module.exports = router;

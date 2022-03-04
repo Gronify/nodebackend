@@ -10,10 +10,10 @@ import { Button, Collapse, List, Paper, TextField } from "@mui/material";
 import { TransitionGroup } from "react-transition-group";
 import CustomDataGrid from "../CustomDataGrid";
 import EditBoxButtons from "../EditBoxButtons";
-import ApplicationService from "../../services/ApplicationService";
+import HairdresserService from "../../services/HairdresserService";
 import moment from "moment";
 
-export default function Application() {
+export default function Hairdresser() {
   const scrollToTopRef = useRef(null);
   const executeScroll = () => scrollToTopRef.current.scrollIntoView();
 
@@ -77,7 +77,7 @@ export default function Application() {
   const refreshData = () => {
     setDataGridLoading(true);
 
-    ApplicationService.getAll()
+    HairdresserService.getAll()
       .then((response) => {
         setDataRows(response.data);
         setDataGridLoading(false);
@@ -93,9 +93,8 @@ export default function Application() {
       id: props.row?.id,
       name: "",
       surname: "",
-      order: "",
-      price: 0,
-      status: "",
+      sex: "",
+      salary: "",
     });
     useEffect(() => {
       console.log(props.row);
@@ -103,9 +102,8 @@ export default function Application() {
         id: props.row?.id,
         name: props.row?.name,
         surname: props.row?.surname,
-        order: props.row?.order,
-        price: props.row?.price,
-        status: props.row?.status,
+        sex: props.row?.sex,
+        salary: props.row?.salary,
       });
     }, [props.row]);
 
@@ -114,13 +112,12 @@ export default function Application() {
     };
 
     function edit(params) {
-      ApplicationService.put(
+      HairdresserService.put(
         params.id,
         params.name,
         params.surname,
-        params.order,
-        params.price,
-        params.status
+        params.sex,
+        params.salary
       )
         .then((response) => {
           refreshData();
@@ -135,13 +132,12 @@ export default function Application() {
     }
 
     function create(params) {
-      ApplicationService.create(
+      HairdresserService.create(
         params.id,
         params.name,
         params.surname,
-        params.order,
-        params.price,
-        params.status
+        params.sex,
+        params.salary
       )
         .then((response) => {
           refreshData();
@@ -189,24 +185,17 @@ export default function Application() {
         />
         <TextField
           id="outlined-basic"
-          label="price"
+          label="sex"
           variant="outlined"
-          value={values.price}
-          onChange={handleChange("price")}
+          value={values.sex}
+          onChange={handleChange("sex")}
         />
         <TextField
           id="outlined-basic"
-          label="order"
+          label="salary"
           variant="outlined"
-          value={values.order}
-          onChange={handleChange("order")}
-        />
-        <TextField
-          id="outlined-basic"
-          label="status"
-          variant="outlined"
-          value={values.status}
-          onChange={handleChange("status")}
+          value={values.salary}
+          onChange={handleChange("salary")}
         />
 
         {values.id ? (

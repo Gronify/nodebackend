@@ -12,6 +12,7 @@ import CustomDataGrid from "../CustomDataGrid";
 import UserService from "../../services/UserService";
 import EditBoxButtons from "../EditBoxButtons";
 import AuthService from "../../services/AuthService";
+import moment from "moment";
 
 export default function Users() {
   const scrollToTopRef = useRef(null);
@@ -27,8 +28,24 @@ export default function Users() {
     { field: "email", headerName: "email", width: 200 },
     { field: "role", headerName: "role", width: 100 },
     { field: "password", headerName: "password", width: 150 },
-    { field: "createdAt", headerName: "createdAt", type: "date", width: 200 },
-    { field: "updatedAt", headerName: "updatedAt", type: "date", width: 200 },
+    {
+      field: "createdAt",
+      headerName: "createdAt",
+      type: "date",
+      width: 200,
+      valueFormatter: (params) => {
+        return moment(params.value).format("DD.MM.yyyy HH:mm:ss Z");
+      },
+    },
+    {
+      field: "updatedAt",
+      headerName: "updatedAt",
+      type: "date",
+      width: 200,
+      valueFormatter: (params) => {
+        return moment(params.value).format("DD.MM.yyyy HH:mm:ss Z");
+      },
+    },
     {
       field: "actions",
       type: "actions",
