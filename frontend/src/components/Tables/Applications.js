@@ -25,8 +25,8 @@ export default function Application() {
     { field: "id", headerName: "ID", width: 90 },
     { field: "name", headerName: "name", width: 200 },
     { field: "surname", headerName: "surname", width: 200 },
-    { field: "sex", headerName: "sex", width: 200 },
-    { field: "salary", headerName: "salary", width: 200 },
+    { field: "order", headerName: "order", width: 200 },
+    { field: "status", headerName: "status", width: 200 },
     {
       field: "createdAt",
       headerName: "createdAt",

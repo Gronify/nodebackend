@@ -22,9 +22,17 @@ export default function Navbar(props) {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          color="inherit"
+          component={Link}
+          to=""
+          sx={{ flexGrow: 1 }}
+          style={{ textDecoration: "none" }}
+        >
           Admin Panel
         </Typography>
+
         {props.auth ? (
           <div>
             <Button

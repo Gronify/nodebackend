@@ -19,6 +19,7 @@ export default function Login(props) {
     AuthService.login(email, password)
       .then((response) => {
         localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem("role", response.data.user.role);
         props.setUpdate(!props.update);
         setError("");
         navigate("/");

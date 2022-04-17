@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
+import Tables from "./components/Tables";
 import Home from "./components/Home";
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
           path="/tables"
           element={
             <PrivateRoute>
-              <Home />
+              <Tables />
             </PrivateRoute>
           }
         />

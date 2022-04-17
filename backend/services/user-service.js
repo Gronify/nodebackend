@@ -47,6 +47,7 @@ class UserService {
       id: user.id,
       username: user.username,
       email: user.email,
+      role: user.role,
     };
 
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -74,6 +75,7 @@ class UserService {
       id: user.id,
       username: user.username,
       email: user.email,
+      role: user.role,
     };
     const tokens = tokenService.generateTokens({ ...userDto });
 
