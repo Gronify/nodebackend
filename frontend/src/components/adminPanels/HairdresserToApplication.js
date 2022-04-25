@@ -29,6 +29,17 @@ export default function HairdresserToApplication() {
     refreshData();
   }, []);
 
+  const submitAction = (values) => {
+    ApplicationService.connectToHairdresser(
+      values.application,
+      values.hairdresser
+    )
+      .then((response) => {})
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  };
+
   const refreshData = () => {
     HairdresserService.getAll()
       .then((response) => {
@@ -99,7 +110,7 @@ export default function HairdresserToApplication() {
         color="secondary"
         startIcon={<AddIcon />}
         onClick={() => {
-          // create(values);
+          submitAction(values);
         }}
       >
         Create

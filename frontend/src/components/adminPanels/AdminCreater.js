@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import gendersList from "../../constants/genders";
 
 import AddIcon from "@mui/icons-material/Add";
+import UserService from "../../services/UserService";
 
 export default function AdminCreater() {
   const [values, setValues] = useState({
@@ -32,6 +33,8 @@ export default function AdminCreater() {
   useEffect(() => {
     refreshData();
   }, []);
+
+  const submitAction = (values) => {};
 
   const refreshData = () => {
     setGenders(gendersList);
@@ -96,6 +99,14 @@ export default function AdminCreater() {
 
       <TextField
         id="outlined-basic"
+        label="username"
+        variant="outlined"
+        value={values.email}
+        onChange={handleChange("email")}
+      />
+
+      <TextField
+        id="outlined-basic"
         label="email"
         type="password"
         variant="outlined"
@@ -108,7 +119,7 @@ export default function AdminCreater() {
         color="secondary"
         startIcon={<AddIcon />}
         onClick={() => {
-          // create(values);
+          submitAction(values);
         }}
       >
         Create

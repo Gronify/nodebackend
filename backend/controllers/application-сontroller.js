@@ -43,6 +43,20 @@ class ApplicationController {
       next(e);
     }
   }
+  async connectApplicationToHairdresser(req, res, next) {
+    try {
+      const { applicationId, hairdresserId } = req.body;
+      const applicationData =
+        await applicationService.connectApplicationToHairdresser(
+          applicationId,
+          hairdresserId
+        );
+
+      return res.json(applicationData);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new ApplicationController();

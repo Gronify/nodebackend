@@ -24,4 +24,10 @@ export default class ApplicationService {
       status,
     });
   }
+  static async connectToHairdresser(applicationId, hairdresserId) {
+    return $api.put("/application/applicationConnected", {
+      applicationId,
+      hairdresserId,
+    });
+  }
 }

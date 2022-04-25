@@ -18,5 +18,11 @@ router.get(
   checkRoleMiddleware(ADMIN.name),
   applicationСontroller.getAll
 );
+router.put(
+  "/applicationConnected",
+  authMiddleware,
+  checkRoleMiddleware(ADMIN.name),
+  applicationСontroller.connectApplicationToHairdresser
+);
 
 module.exports = router;

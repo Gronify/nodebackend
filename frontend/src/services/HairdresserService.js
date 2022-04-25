@@ -22,4 +22,23 @@ export default class HairdresserService {
       salary,
     });
   }
+  static async createWithUser(
+    username,
+    email,
+    password,
+    name,
+    surname,
+    sex,
+    salary
+  ) {
+    return $api.post("/hairdresser/create", {
+      username,
+      email,
+      password,
+      name,
+      surname,
+      sex,
+      salary,
+    });
+  }
 }

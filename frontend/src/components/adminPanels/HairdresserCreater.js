@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import gendersList from "../../constants/genders";
 
 import AddIcon from "@mui/icons-material/Add";
+import HairdresserService from "../../services/HairdresserService";
 
 export default function HairdresserCreater() {
   const [values, setValues] = useState({
@@ -32,6 +33,24 @@ export default function HairdresserCreater() {
   useEffect(() => {
     refreshData();
   }, []);
+
+  const submitAction = (values) => {
+    HairdresserService.createWithUser(
+      values.username,
+      values.email,
+      values.password,
+      values.name,
+      values.surname,
+      values.sex,
+      values.salary
+    )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  };
 
   const refreshData = () => {
     setGenders(gendersList);
@@ -97,6 +116,14 @@ export default function HairdresserCreater() {
       <TextField
         id="outlined-basic"
         label="email"
+        variant="outlined"
+        value={values.email}
+        onChange={handleChange("email")}
+      />
+
+      <TextField
+        id="outlined-basic"
+        label="password"
         type="password"
         variant="outlined"
         value={values.password}
@@ -108,7 +135,7 @@ export default function HairdresserCreater() {
         color="secondary"
         startIcon={<AddIcon />}
         onClick={() => {
-          // create(values);
+          submitAction(values);
         }}
       >
         Create

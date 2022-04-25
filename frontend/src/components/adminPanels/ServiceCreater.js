@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import gendersList from "../../constants/genders";
+import ServicesService from "../../services/ServicesService";
 
 export default function ServiceCreater() {
   const [values, setValues] = useState({
@@ -29,6 +30,19 @@ export default function ServiceCreater() {
     refreshData();
   }, []);
 
+  const submitAction = (values) => {
+    ServicesService.create(
+      values.id,
+      values.name,
+      values.description,
+      values.sex,
+      values.price
+    )
+      .then((response) => {})
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  };
   const refreshData = () => {
     setGenders(gendersList);
   };
@@ -87,7 +101,7 @@ export default function ServiceCreater() {
         color="secondary"
         startIcon={<AddIcon />}
         onClick={() => {
-          // create(values);
+          submitAction(values);
         }}
       >
         Create

@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import ServicesService from "../../services/ServicesService";
 import AddIcon from "@mui/icons-material/Add";
+import ApplicationService from "../../services/ApplicationService";
 
 export default function ApplicationCreater() {
   const [values, setValues] = useState({
@@ -28,6 +29,21 @@ export default function ApplicationCreater() {
   useEffect(() => {
     refreshData();
   }, []);
+
+  const submitAction = (values) => {
+    ApplicationService.create(
+      values.id,
+      values.name,
+      values.surname,
+      values.order,
+      values.price,
+      values.status
+    )
+      .then((response) => {})
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  };
 
   const refreshData = () => {
     ServicesService.getAll()
@@ -125,7 +141,7 @@ export default function ApplicationCreater() {
         color="secondary"
         startIcon={<AddIcon />}
         onClick={() => {
-          // create(values);
+          submitAction(values);
         }}
       >
         Create

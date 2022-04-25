@@ -24,5 +24,11 @@ router.get(
   checkRoleMiddleware(ADMIN.name),
   hairdresserСontroller.getAll
 );
+router.post(
+  "/create",
+  authMiddleware,
+  checkRoleMiddleware(ADMIN.name),
+  hairdresserСontroller.createWithUser
+);
 
 module.exports = router;

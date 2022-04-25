@@ -1,4 +1,4 @@
-const { Application } = require("../models");
+const { Application, Hairdresser } = require("../models");
 const argon = require("argon2");
 const tokenService = require("./token-service");
 const ApiError = require("../error/api-error");
@@ -63,6 +63,31 @@ class ApplicationService {
   async getAll() {
     const applications = await Application.findAll();
     return applications;
+  }
+
+  async connectApplicationToHairdresser(applicationId, hairdresserId) {
+    const application = await Application.findOne({
+      where: { id: applicationId },
+    });
+
+    const hairdresser = await Hairdresser.findOne({
+      where: { id: applicationId },
+    });
+
+    const updatedApplication = await application.update({
+      hairdresserId: hairdresser.id,
+    });
+
+    const applicationDto = {
+      id: updatedApplication.id,
+      name: updatedApplication.name,
+      surname: updatedApplication.surname,
+      order: updatedApplication.order,
+      price: updatedApplication.price,
+      status: updatedApplication.status,
+    };
+
+    return { application: applicationDto };
   }
 }
 

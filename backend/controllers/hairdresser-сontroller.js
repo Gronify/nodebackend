@@ -40,6 +40,24 @@ class HairdresserController {
       next(e);
     }
   }
+  async createWithUser(req, res, next) {
+    try {
+      const { username, email, password, name, surname, sex, salary } =
+        req.body;
+      const hairdresser = await hairdresserService.createWithUser(
+        username,
+        email,
+        password,
+        name,
+        surname,
+        sex,
+        salary
+      );
+      return res.status(201).json({ message: "hairdresser created" });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 module.exports = new HairdresserController();
