@@ -66,7 +66,7 @@ class HairdresserService {
       const newUser = await User.findOne({ where: { id: user.user.id } });
       console.log(newUser);
       await newUser.update({
-        role: "HAIRDRASSER",
+        role: "HAIRDRESSER",
       });
 
       const hairdresser = await Hairdresser.create({

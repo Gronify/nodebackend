@@ -11,7 +11,7 @@ const HAIRDRESSER_MALE = {
 };
 const HAIRDRESSER_UNIVERSAL = {
   id: 2,
-  name: "HAIRDRESSER_UNIVERSAL",
+  name: "HAIRDRESSER",
   alsoHasPermission: [HAIRDRESSER_MALE, HAIRDRESSER_FEMALE],
 };
 const ADMIN = { id: 1, name: "ADMIN", alsoHasPermission: [USER] };

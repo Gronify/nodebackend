@@ -1,5 +1,5 @@
 const Router = require("express");
-const { ADMIN } = require("../constants/roles");
+const { ADMIN, HAIRDRESSER_UNIVERSAL } = require("../constants/roles");
 const applicationСontroller = require("../controllers/application-сontroller");
 const authMiddleware = require("../middlewares/auth-middleware");
 const checkRoleMiddleware = require("../middlewares/checkRole-middleware");
@@ -9,19 +9,19 @@ router.post("/", applicationСontroller.create);
 router.put(
   "/",
   authMiddleware,
-  checkRoleMiddleware(ADMIN.name),
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   applicationСontroller.edit
 );
 router.get(
   "/",
   authMiddleware,
-  checkRoleMiddleware(ADMIN.name),
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   applicationСontroller.getAll
 );
 router.put(
   "/applicationConnected",
   authMiddleware,
-  checkRoleMiddleware(ADMIN.name),
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   applicationСontroller.connectApplicationToHairdresser
 );
 

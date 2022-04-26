@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
   Paper,
   Typography,
@@ -16,8 +17,13 @@ import HairdresserCreater from "./adminPanels/HairdresserCreater";
 import HairdresserToApplication from "./adminPanels/HairdresserToApplication";
 
 export default function Home() {
+  const [role, setRole] = useState("USER");
+  useEffect(() => {
+    setRole(localStorage.role);
+  }, []);
+
   return (
-    <div>
+    <Box sx={{ mx: "auto", p: 1, m: 2 }}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -30,58 +36,62 @@ export default function Home() {
           <ApplicationCreater />
         </AccordionDetails>
       </Accordion>
-
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Create Service</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <ServiceCreater />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Create Admin</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <AdminCreater />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Create Hairdresser</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <HairdresserCreater />
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Hairdresser to application</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <HairdresserToApplication />
-        </AccordionDetails>
-      </Accordion>
-    </div>
+      {role == "ADMIN" || role == "HAIRDRESSER" ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>Create Service</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ServiceCreater />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
+      {role == "ADMIN" ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>Create Admin</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <AdminCreater />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
+      {role == "ADMIN" ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>Create Hairdresser</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <HairdresserCreater />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
+      {role == "ADMIN" ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>Hairdresser to application</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <HairdresserToApplication />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
+    </Box>
   );
 }

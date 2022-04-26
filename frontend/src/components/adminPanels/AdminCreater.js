@@ -34,8 +34,20 @@ export default function AdminCreater() {
     refreshData();
   }, []);
 
-  const submitAction = (values) => {};
-
+  const submitAction = (values) => {
+    UserService.createUser(
+      values.username,
+      values.email,
+      values.password,
+      values.role
+    )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e.response?.data?.message);
+      });
+  };
   const refreshData = () => {
     setGenders(gendersList);
   };
@@ -99,7 +111,7 @@ export default function AdminCreater() {
 
       <TextField
         id="outlined-basic"
-        label="username"
+        label="email"
         variant="outlined"
         value={values.email}
         onChange={handleChange("email")}
@@ -107,7 +119,7 @@ export default function AdminCreater() {
 
       <TextField
         id="outlined-basic"
-        label="email"
+        label="password"
         type="password"
         variant="outlined"
         value={values.password}

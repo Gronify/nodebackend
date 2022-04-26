@@ -10,7 +10,7 @@ export default class UserService {
   static async putUser(id, username, email, password, role) {
     return $api.put("/user/user", { id, username, email, password, role });
   }
-  static async createUser(id, username, email, password, role) {
-    return $api.post("/user/user", { id, username, email, password, role });
+  static async createUser(username, email, password, role) {
+    return $api.post("/user/user", { username, email, password, role });
   }
 }

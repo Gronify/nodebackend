@@ -1,5 +1,5 @@
 const Router = require("express");
-const { ADMIN } = require("../constants/roles");
+const { ADMIN, HAIRDRESSER_UNIVERSAL } = require("../constants/roles");
 const hairdresserСontroller = require("../controllers/hairdresser-сontroller");
 
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -9,7 +9,7 @@ const router = new Router();
 router.post(
   "/",
   authMiddleware,
-  checkRoleMiddleware(ADMIN.name),
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   hairdresserСontroller.create
 );
 router.put(
@@ -21,7 +21,7 @@ router.put(
 router.get(
   "/",
   authMiddleware,
-  checkRoleMiddleware(ADMIN.name),
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   hairdresserСontroller.getAll
 );
 router.post(
