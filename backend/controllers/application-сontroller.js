@@ -1,5 +1,6 @@
 const ApiError = require("../error/api-error");
 const applicationService = require("../services/application-service");
+const hairdresserService = require("../services/hairdresser-service");
 
 class ApplicationController {
   async create(req, res, next) {
@@ -53,6 +54,34 @@ class ApplicationController {
         );
 
       return res.json(applicationData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async connectApplicationToHairdresserByUser(req, res, next) {
+    try {
+      const { applicationId } = req.body;
+      const user = req.user;
+
+      const hairdresser = await hairdresserService.findByUser(user.id);
+
+      const applicationData =
+        await applicationService.connectApplicationToHairdresser(
+          applicationId,
+          hairdresser.id
+        );
+
+      return res.json(applicationData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getAllNotReady(req, res, next) {
+    try {
+      const applications = await applicationService.getAllNotReady();
+      return res.json(applications);
     } catch (e) {
       next(e);
     }
