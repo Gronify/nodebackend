@@ -3,6 +3,8 @@ const argon = require("argon2");
 const tokenService = require("./token-service");
 const ApiError = require("../error/api-error");
 const logger = require("./logger-service");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 class ApplicationService {
   async create(name, surname, order, price, status) {
@@ -65,13 +67,24 @@ class ApplicationService {
     return applications;
   }
 
+  async getAllNotReady() {
+    // const applications = await Application.findAll({
+    //   where: { status: { [Op.not]: "Ready" }, include: Hairdresser },
+    // });
+    const applications = await Application.findAll({
+      where: { status: { [Op.not]: "Ready" } },
+      include: Hairdresser,
+    });
+    return applications;
+  }
+
   async connectApplicationToHairdresser(applicationId, hairdresserId) {
     const application = await Application.findOne({
       where: { id: applicationId },
     });
 
     const hairdresser = await Hairdresser.findOne({
-      where: { id: applicationId },
+      where: { id: hairdresserId },
     });
 
     const updatedApplication = await application.update({

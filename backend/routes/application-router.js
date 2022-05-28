@@ -18,11 +18,24 @@ router.get(
   checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   applicationСontroller.getAll
 );
+router.get(
+  "/notReady",
+  authMiddleware,
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
+  applicationСontroller.getAllNotReady
+);
 router.put(
   "/applicationConnected",
   authMiddleware,
   checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
   applicationСontroller.connectApplicationToHairdresser
+);
+
+router.put(
+  "/applicationHairdresser",
+  authMiddleware,
+  checkRoleMiddleware(HAIRDRESSER_UNIVERSAL.name),
+  applicationСontroller.connectApplicationToHairdresserByUser
 );
 
 module.exports = router;

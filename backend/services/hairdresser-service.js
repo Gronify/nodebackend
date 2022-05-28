@@ -56,6 +56,13 @@ class HairdresserService {
     return hairdressers;
   }
 
+  async findByUser(id) {
+    const hairdresser = await Hairdresser.findOne({
+      where: { userId: id },
+    });
+    return hairdresser;
+  }
+
   async createWithUser(username, email, password, name, surname, sex, salary) {
     if (typeof name === "undefined" || typeof surname === "undefined") {
       throw ApiError.BadRequest(`Wrong json`);

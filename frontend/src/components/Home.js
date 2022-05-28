@@ -15,6 +15,7 @@ import ServiceCreater from "./adminPanels/ServiceCreater";
 import AdminCreater from "./adminPanels/AdminCreater";
 import HairdresserCreater from "./adminPanels/HairdresserCreater";
 import HairdresserToApplication from "./adminPanels/HairdresserToApplication";
+import ListApplications from "./adminPanels/ListApplications";
 
 export default function Home() {
   const [role, setRole] = useState("USER");
@@ -89,6 +90,20 @@ export default function Home() {
           </AccordionSummary>
           <AccordionDetails>
             <HairdresserToApplication />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
+      {role == "HAIRDRESSER" ? (
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2a-content"
+            id="panel2a-header"
+          >
+            <Typography>List Applications</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ListApplications />
           </AccordionDetails>
         </Accordion>
       ) : null}

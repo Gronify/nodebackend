@@ -4,6 +4,11 @@ export default class ApplicationService {
   static async getAll() {
     return $api.get("/application/");
   }
+
+  static async getNotReady() {
+    return $api.get("/application/notReady");
+  }
+
   static async put(id, name, surname, order, price, status) {
     return $api.put("/application/", {
       id,
@@ -28,6 +33,12 @@ export default class ApplicationService {
     return $api.put("/application/applicationConnected", {
       applicationId,
       hairdresserId,
+    });
+  }
+
+  static async connectToHairdresserByUser(applicationId) {
+    return $api.put("/application/applicationHairdresser", {
+      applicationId,
     });
   }
 }

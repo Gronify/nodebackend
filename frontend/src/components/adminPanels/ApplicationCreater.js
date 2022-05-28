@@ -31,6 +31,11 @@ export default function ApplicationCreater() {
   }, []);
 
   const submitAction = (values) => {
+    if (typeof values.order == "number") {
+      const id = values.order;
+      values.order = services[id - 1].name;
+      values.price = services[id - 1].price;
+    }
     ApplicationService.create(
       values.id,
       values.name,
@@ -48,6 +53,7 @@ export default function ApplicationCreater() {
   const refreshData = () => {
     ServicesService.getAll()
       .then((response) => {
+        console.log(response.data);
         setServices(response.data);
       })
       .catch((e) => {
